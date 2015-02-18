@@ -1,0 +1,56 @@
+---
+title: "QMB Exercise 1 - Exploring Housing Rents"
+author: "Dino Nienhold"
+date: "Wednesday, February 18, 2015"
+output: pdf_document
+---
+
+#Introduction
+The following report is based on the QMB Exercise 1 - Exploring Housing Rents. The task description pdf file is bis_ex1-HousingRents.pdf
+
+#Requirements
+Please make sure that you the following packages loaded in your workspace.
+```{r}
+library("dplyr")
+library("ggplot2")
+```
+
+#Data Set
+Please make sure you have the file housingrents.csv in the subdirectoy Data in your workspace.
+```{r}
+housingrents <- read.csv("./Data/housingrents.csv",sep=";")
+```
+
+#Task 1
+There are `dim(housingrents)[1]` observations and `dim(housingrents)[2]` variables in the dataset.
+The str command gives an overview of the variable types:
+```{r}
+str(housingrents)
+```
+There are 14 NA values in the balcony variable.
+```{r}
+summary(housingrents)
+```
+#Task 2
+
+##Data Processing
+For analysis purposes it is necessary to convert the rooms and nre variable to a factor.
+```{r}
+housingrents <- mutate(housingrents, rooms = factor(rooms), nre = factor(nre,levels=c(0,1),labels=c("no","yes")))
+```
+
+##Plotting
+The following chart shows the frequency of appartments according to their numberof rooms.
+```{r}
+ggplot(data=housingrents, aes(x=rooms,label=rooms))  + geom_bar(fill="blue") + ggtitle("Count by Rooms") 
+```
+
+#Task 3
+```{r}
+rooms2nre <- xtabs(~rooms+nre, data=housingrents)
+rooms2nre <- prop.table(rooms2nre,1)
+ggplot(data.frame(rooms2nre), aes(x=rooms, y=Freq, fill=nre)) + geom_bar(stat="identity") + 
+  xlab("Number of Rooms") + ylab("Ratio of NRE Property to non-Property") + 
+  ggtitle("NRE Property by Number of Rooms") 
+addmargins(prop.table(rooms2nre,1))
+```
