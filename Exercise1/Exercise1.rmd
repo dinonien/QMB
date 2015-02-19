@@ -1,7 +1,7 @@
 ---
 title: "QMB Exercise 1 - Exploring Housing Rents"
 author: "Dino Nienhold"
-date: "Wednesday, February 19, 2015"
+date: "19 Feb, 2015"
 output: pdf_document
 ---
 
@@ -125,20 +125,25 @@ select(housingrents,rent,nre) %>%
 \pagebreak
 
 #Task 6
-This sections shows that the variables rent and the area are correlated.
+This sections shows that the variables rent and the area are associated.
 ```{r}
 ggplot(housingrents, aes(x=area, y=rent)) +
-    geom_point(shape=1) +  geom_smooth(method=lm)
+    geom_point(shape=1) +  geom_smooth(method=lm) +
+    ylim(0, 5000) + 
+    xlim(0,300)
+
 ```
     
 The outliers are appartmentswith a high rent >2500
 ```{r}
 filter(housingrents, rent > 2500)
 ```
-Without the outliers their is a stronger correlation between the rent and the area.
+Without the outliers the correlation between the rent and the area stays around the same.
 ```{r}
 ggplot(filter(housingrents, rent <= 2500 ), aes(x=area, y=rent)) +
-    geom_point(shape=1) +  geom_smooth(method=lm)
+     geom_point(shape=1) +  geom_smooth(method=lm) +
+    ylim(0, 5000) + 
+    xlim(0,300)
 ```
 
 \pagebreak
